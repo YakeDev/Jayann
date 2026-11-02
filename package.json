@@ -1,0 +1,45 @@
+{
+  "name": "jayann",
+  "displayName": "Jayann",
+  "description": "An AI development companion for Visual Studio Code (prototype).",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onView:jayann.sidebar",
+    "onCommand:jayann.inspectWorkspace"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "jayann.inspectWorkspace",
+        "title": "Jayann: Inspect Workspace"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "jayann.sidebar",
+          "name": "Jayann",
+          "type": "webview"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "check": "npm run compile && node --test test/*.test.cjs",
+    "watch": "tsc -watch -p ."
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/vscode": "^1.96.0",
+    "typescript": "~5.8.3"
+  }
+}
