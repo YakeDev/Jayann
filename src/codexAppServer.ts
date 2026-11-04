@@ -10,6 +10,9 @@ export interface AccountSnapshot {
 }
 
 export class CodexAppServer {
+  // Test injection avoids real CLI launch or real network authentication during unit tests.
+  constructor(private readonly launch: typeof spawn = spawn) {}
+
   private child?: ChildProcessWithoutNullStreams;
   private ready?: Promise<void>;
   private sequence = 0;
@@ -36,7 +39,7 @@ export class CodexAppServer {
     try {
       // Arguments are fixed. No workspace or user input is passed to a shell.
       // Windows npm installs expose codex.cmd, which requires a command-shell launcher.
-      this.child = spawn('codex', ['app-server', '--listen', 'stdio://'], {
+      this.child = this.launch('codex', ['app-server', '--listen', 'stdio://'], {
         stdio: ['pipe', 'pipe', 'pipe'],
         windowsHide: true,
         shell: process.platform === 'win32',
