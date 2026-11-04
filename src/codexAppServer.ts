@@ -45,14 +45,23 @@ export class CodexAppServer {
       throw new Error('Impossible de démarrer Codex CLI. Installe @openai/codex et vérifie PATH.');
     }
     const child = this.child;
+    if (!child) throw new Error('Codex CLI ne démarre pas.');
     child.stdout.setEncoding('utf8');
     child.stdout.on('data', (chunk: string) => this.consume(chunk));
     // Deliberately do not display or record stderr: it may contain account details.
     child.stderr.resume();
 
-    child.on('error', () => this.disconnected('Codex CLI introuvable. Installe-le puis réessaie.'));
+    child.on('error', () => {
+      if (this.child !== child) return;
+      this.disconnected('Codex CLI introuvable. Installe-le puis réessaie.');
+      this.child = undefined;
+      this.ready = undefined;
+    });
     child.on('exit', () => {
-      if (this.child === child) this.disconnected('Le service local Codex s’est arrêté.');
+      if (this.child !== child) return;
+      this.disconnected('Le service local Codex s’est arrêté.');
+      this.child = undefined;
+      this.ready = undefined;
     });
 
     await this.request('initialize', {
