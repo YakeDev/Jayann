@@ -1,8 +1,8 @@
 {
   "name": "jayann",
   "displayName": "Jayann",
-  "description": "An AI development companion for Visual Studio Code (prototype).",
-  "version": "0.1.0",
+  "description": "Secure ChatGPT sign-in and local workspace inspection for VS Code (prototype).",
+  "version": "0.2.0",
   "private": true,
   "engines": {
     "vscode": "^1.96.0"
@@ -13,13 +13,28 @@
   "main": "./out/extension.js",
   "activationEvents": [
     "onView:jayann.sidebar",
-    "onCommand:jayann.inspectWorkspace"
+    "onCommand:jayann.inspectWorkspace",
+    "onCommand:jayann.connectChatgpt",
+    "onCommand:jayann.refreshAuth",
+    "onCommand:jayann.disconnectChatgpt"
   ],
   "contributes": {
     "commands": [
       {
         "command": "jayann.inspectWorkspace",
         "title": "Jayann: Inspect Workspace"
+      },
+      {
+        "command": "jayann.connectChatgpt",
+        "title": "Jayann: Connect ChatGPT"
+      },
+      {
+        "command": "jayann.refreshAuth",
+        "title": "Jayann: Refresh ChatGPT Status"
+      },
+      {
+        "command": "jayann.disconnectChatgpt",
+        "title": "Jayann: Disconnect ChatGPT"
       }
     ],
     "views": {
