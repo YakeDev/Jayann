@@ -25,7 +25,7 @@ This prototype deliberately has **no remote service or model integration**.
 
 - Do not read any file contents in MVP 0.1.
 - Never execute a shell command in MVP 0.1.
-- Require trusted workspace before a local listing.
+- Require trusted workspace before inspecting an open workspace; if none is open, require the user to explicitly select a folder with the folder picker before any listing.
 - Do not persist or transmit secrets.
 - No external network connections in MVP 0.1.
 - UI explicitly identifies unimplemented features.
