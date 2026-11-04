@@ -6,25 +6,38 @@ import { AuthViewState } from './panel';
 export class AuthController implements vscode.Disposable {
   private readonly server = new CodexAppServer();
   private busy = false;
+  private refreshQueued = false;
   private loginId?: string;
   private current: AuthViewState = { phase: 'idle', message: 'Prêt à vérifier la session ChatGPT.' };
 
   constructor(private readonly publish: (state: AuthViewState) => void) {
     this.server.onNotification = (method, params) => {
       if (method === 'account/updated') {
-        void this.refresh();
+        this.scheduleRefresh();
       }
       if (method === 'account/login/completed') {
         const p = params as { loginId?: string; success?: boolean; error?: string } | undefined;
-        if (this.loginId && p?.loginId !== this.loginId) return;
+        if (!this.loginId || p?.loginId !== this.loginId) return;
         this.loginId = undefined;
-        if (p?.success) void this.refresh();
+        if (p?.success) this.scheduleRefresh();
         else this.set({ phase: 'error', message: p?.error || 'Connexion ChatGPT non terminée.' });
       }
     };
     this.server.onDisconnected = () => {
       this.set({ phase: 'error', message: 'Codex CLI n’est pas disponible. Vérifie son installation.' });
     };
+  }
+
+  private scheduleRefresh(): void {
+    if (this.busy) { this.refreshQueued = true; return; }
+    void this.refresh();
+  }
+  private finishBusy(): void {
+    this.busy = false;
+    if (this.refreshQueued) {
+      this.refreshQueued = false;
+      void this.refresh();
+    }
   }
 
   show(): void { this.publish(this.current); }
@@ -48,7 +61,7 @@ export class AuthController implements vscode.Disposable {
         this.set({ phase: 'disconnected', message: 'Codex utilise actuellement un autre mode de connexion : ' + account.type });
       }
     } catch (error) { this.failure(error); }
-    finally { this.busy = false; }
+    finally { this.finishBusy(); }
   }
 
   async connect(): Promise<void> {
@@ -65,7 +78,7 @@ export class AuthController implements vscode.Disposable {
       if (!opened) throw new Error('Impossible d’ouvrir le navigateur. Réessaie.');
       this.set({ phase: 'waiting', message: 'Termine la connexion ChatGPT dans ton navigateur, puis reviens dans Jayann.' });
     } catch (error) { this.loginId = undefined; this.failure(error); }
-    finally { this.busy = false; }
+    finally { this.finishBusy(); }
   }
 
   async disconnect(): Promise<void> {
@@ -82,7 +95,7 @@ export class AuthController implements vscode.Disposable {
       this.loginId = undefined;
       this.set({ phase: 'disconnected', message: 'Déconnecté de ChatGPT.' });
     } catch (error) { this.failure(error); }
-    finally { this.busy = false; }
+    finally { this.finishBusy(); }
   }
 
   dispose(): void { this.server.dispose(); }
