@@ -9,15 +9,30 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider('jayann.sidebar', new JayannPanel()),
     vscode.commands.registerCommand('jayann.inspectWorkspace', async () => {
-      if (!vscode.workspace.isTrusted) {
-        await vscode.window.showWarningMessage('Jayann: Trust this workspace before inspecting it.');
-        return;
-      }
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      let folders: Array<{ name: string; uri: vscode.Uri }>;
 
-      const folders = vscode.workspace.workspaceFolders;
-      if (!folders?.length) {
-        await vscode.window.showInformationMessage('Jayann: Open a folder or workspace first.');
-        return;
+      if (workspaceFolders?.length) {
+        if (!vscode.workspace.isTrusted) {
+          await vscode.window.showWarningMessage('Jayann: Trust this workspace before inspecting it.');
+          return;
+        }
+        folders = workspaceFolders.map(({ name, uri }) => ({ name, uri }));
+      } else {
+        // The Extension Development Host often starts with no workspace.
+        // Explicit selection only: no silent file access and no file contents are read.
+        const selected = await vscode.window.showOpenDialog({
+          title: 'Jayann: Choose a project folder to inspect',
+          openLabel: 'Inspect this folder',
+          canSelectFiles: false,
+          canSelectFolders: true,
+          canSelectMany: false
+        });
+
+        if (!selected?.length) return;
+        const uri = selected[0];
+        const name = uri.path.split('/').filter(Boolean).pop() || 'Selected folder';
+        folders = [{ name, uri }];
       }
 
       output.clear();
