@@ -76,7 +76,10 @@ export class AuthController implements vscode.Disposable {
       this.loginId = auth.loginId;
       const opened = await vscode.env.openExternal(vscode.Uri.parse(auth.authUrl));
       if (!opened) throw new Error('Impossible d’ouvrir le navigateur. Réessaie.');
-      this.set({ phase: 'waiting', message: 'Termine la connexion ChatGPT dans ton navigateur, puis reviens dans Jayann.' });
+      // A very fast login notification may already have completed while the browser was opening.
+      if (this.loginId === auth.loginId) {
+        this.set({ phase: 'waiting', message: 'Termine la connexion ChatGPT dans ton navigateur, puis reviens dans Jayann.' });
+      }
     } catch (error) { this.loginId = undefined; this.failure(error); }
     finally { this.finishBusy(); }
   }
