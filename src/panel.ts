@@ -43,7 +43,7 @@ export class JayannPanel implements vscode.WebviewViewProvider {
       'button{display:block;width:100%;padding:9px 12px;margin:8px 0;cursor:pointer;',
       'background:var(--vscode-button-background);color:var(--vscode-button-foreground);border:0;border-radius:4px}',
       'button.secondary{background:var(--vscode-button-secondaryBackground);color:var(--vscode-button-secondaryForeground)}',
-      'button:disabled{opacity:.5;cursor:default}.subheading{font-weight:600;margin-top:18px}',
+      'button:disabled{opacity:.5;cursor:default}[hidden]{display:none!important}.subheading{font-weight:600;margin-top:18px}',
       '</style></head><body>',
       '<h2>Jayann</h2>',
       '<p>Assistant de développement · MVP 0.2</p>',
