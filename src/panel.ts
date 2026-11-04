@@ -20,7 +20,7 @@ export class JayannPanel implements vscode.WebviewViewProvider {
       '</style></head><body>',
       '<h2>Jayann</h2>',
       '<div class="status">MVP 0.1 · Local-only prototype</div>',
-      '<p>Inspect this workspace safely. AI chat and ChatGPT sign-in will be added in a later milestone.</p>',
+      '<p>Inspect the open workspace, or select a project folder if none is open. Only local top-level names are listed. AI chat and ChatGPT sign-in are not available yet.</p>',
       '<button id="inspect" type="button">Inspect workspace</button>',
       '<button id="connect" class="secondary" type="button">ChatGPT sign-in (coming soon)</button>',
       `<script nonce="${nonce}">`,
