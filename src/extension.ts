@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext): void {
     connect: () => auth.connect(),
     refresh: () => auth.refresh(),
     disconnect: () => auth.disconnect(),
-    inspect: () => vscode.commands.executeCommand('jayann.inspectWorkspace')
+    inspect: async () => { await vscode.commands.executeCommand('jayann.inspectWorkspace'); }
   });
   auth = new AuthController(state => panel.updateAuthState(state));
   context.subscriptions.push(auth);
