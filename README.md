@@ -24,7 +24,7 @@ npm install
 npm run check
 ```
 
-Open this repository in VS Code and press **F5**. The debug configuration automatically opens the Jayann repository as the test workspace in the new *Extension Development Host* (so it should no longer say `Open a folder or workspace first`). In that new window, open **Explorer → Jayann**, then click **Inspect workspace**, or run **Jayann: Inspect Workspace** in the Command Palette. See **View → Output → Jayann** for the local listing. To inspect a different project, open that folder in the *Extension Development Host*.
+Open this repository in VS Code and press **F5**. In the *Extension Development Host*, open **Explorer → Jayann** and click **Inspect workspace**, or run **Jayann: Inspect Workspace** from the Command Palette. If the debug host has no open workspace, a folder picker appears: choose the project folder directly (it is **not** necessary to reopen the editor). The listing appears under **View → Output → Jayann**. Only top-level file and directory names are listed locally; no file content is read, executed or transmitted.
 
 No API key or ChatGPT account is required for this local-only prototype.
 
