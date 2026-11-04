@@ -24,7 +24,7 @@ npm install
 npm run check
 ```
 
-Open this repository in VS Code and press **F5**. In the new *Extension Development Host*, open **Explorer → Jayann**. Click **Inspect workspace**, or run **Jayann: Inspect Workspace** in the Command Palette.
+Open this repository in VS Code and press **F5**. The debug configuration automatically opens the Jayann repository as the test workspace in the new *Extension Development Host* (so it should no longer say `Open a folder or workspace first`). In that new window, open **Explorer → Jayann**, then click **Inspect workspace**, or run **Jayann: Inspect Workspace** in the Command Palette. See **View → Output → Jayann** for the local listing. To inspect a different project, open that folder in the *Extension Development Host*.
 
 No API key or ChatGPT account is required for this local-only prototype.
 
